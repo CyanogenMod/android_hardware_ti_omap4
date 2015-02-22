@@ -19,19 +19,23 @@
 #ifndef RPMSG_OMX_H
 #define RPMSG_OMX_H
 #include <linux/ioctl.h>
+#ifdef USE_TI_LIBION
 struct omx_pvr_data {
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  int fd;
  unsigned int num_handles;
  void *handles[2];
 };
+#endif
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define OMX_IOC_MAGIC 'X'
 #define OMX_IOCCONNECT _IOW(OMX_IOC_MAGIC, 1, char *)
 #define OMX_IOCIONREGISTER _IOWR(OMX_IOC_MAGIC, 2, struct ion_fd_data)
 #define OMX_IOCIONUNREGISTER _IOWR(OMX_IOC_MAGIC, 3, struct ion_fd_data)
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#ifdef USE_TI_LIBION
 #define OMX_IOCPVRREGISTER _IOWR(OMX_IOC_MAGIC, 4, struct omx_pvr_data)
+#else
+#define OMX_IOCPVRREGISTER _IOWR(OMX_IOC_MAGIC, 4, struct ion_fd_data)
+#endif
 #define OMX_IOC_MAXNR (4)
 struct omx_conn_req {
  char name[48];
