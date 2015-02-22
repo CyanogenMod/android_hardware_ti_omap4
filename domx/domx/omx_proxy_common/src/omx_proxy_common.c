@@ -75,7 +75,11 @@
 #ifdef ALLOCATE_TILER_BUFFER_IN_PROXY
 #ifdef USE_ION
 #include <unistd.h>
+#ifdef USE_TI_LIBION
 #include <ion_ti/ion.h>
+#else
+#include <ion/ion.h>
+#endif
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 #include <sys/eventfd.h>
@@ -185,10 +189,17 @@ RPC_OMX_ERRORTYPE RPC_RegisterBuffer(OMX_HANDLETYPE hRPCCtx, int fd1, int fd2,
     else if(proxyBufferType == GrallocPointers)
     {
 #ifdef ENABLE_GRALLOC_BUFFERS
+#ifdef USE_TI_LIBION
 		struct omx_pvr_data pvr_data;
 
 		pvr_data.fd = fd1;
 		memset(pvr_data.handles, 0x0, sizeof(pvr_data.handles));
+#else
+		struct ion_fd_data pvr_data;
+
+		pvr_data.fd = fd1;
+		pvr_data.handle = NULL;
+#endif
 		status = ioctl(pRPCCtx->fd_omx, OMX_IOCPVRREGISTER, &pvr_data);
 		if (status < 0) {
 			if (errno == ENOTTY) {
@@ -200,14 +211,20 @@ RPC_OMX_ERRORTYPE RPC_RegisterBuffer(OMX_HANDLETYPE hRPCCtx, int fd1, int fd2,
 			goto EXIT;
 		}
 
+#ifdef USE_TI_LIBION
 		if (pvr_data.handles[0])
 			*handle1 = pvr_data.handles[0];
+#else
+		if (pvr_data.handle)
+			*handle1 = pvr_data.handle;
+#endif
 		else
 		{
 				DOMX_ERROR("Registration failed - Invalid fd passed for gralloc - reg handle (Y) is NULL");
 			    eRPCError = RPC_OMX_ErrorBadParameter;
 			    goto EXIT;
 		}
+#ifdef USE_TI_LIBION
 		if(pvr_data.num_handles > 1)
 		{
 			if (pvr_data.handles[1])
@@ -224,6 +241,9 @@ RPC_OMX_ERRORTYPE RPC_RegisterBuffer(OMX_HANDLETYPE hRPCCtx, int fd1, int fd2,
 			DOMX_DEBUG("Gralloc buffer has only one component");
 			*handle2 = NULL;
 		}
+#else
+		*handle2 = NULL;
+#endif
 #else
  DOMX_ERROR("No Registerbuffer implementation for gralloc - macro mess up!");
 #endif
