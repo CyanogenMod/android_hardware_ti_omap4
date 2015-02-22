@@ -31,10 +31,17 @@ PRODUCT_PACKAGES += \
     libstagefrighthw \
     libI420colorconvert \
     libtiutils \
-    libion_ti \
     smc_pa_ctrl \
     tf_daemon \
     libtf_crypto_sst
+
+ifeq ($(BOARD_USE_TI_LIBION),true)
+PRODUCT_PACKAGES += \
+    libion_ti
+else
+PRODUCT_PACKAGES += \
+    libion
+endif
 
 # symlinks and pvr files
 PRODUCT_PACKAGES += \
