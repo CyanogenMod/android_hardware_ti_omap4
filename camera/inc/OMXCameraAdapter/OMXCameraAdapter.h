@@ -1136,10 +1136,6 @@ private:
     int mCurrentZoomBracketing;
     android::CameraParameters mParameters;
 
-#ifdef CAMERAHAL_TUNA
-    bool mIternalRecordingHint;
-#endif
-
     bool mOmxInitialized;
     OMXCameraAdapterComponentContext mCameraAdapterParameters;
     bool mFirstTimeInit;

@@ -670,13 +670,6 @@ status_t OMXCameraAdapter::setCaptureMode(OMXCameraAdapter::CaptureMode mode)
             const char* valstr = NULL;
             CAMHAL_LOGDA("Camera mode: HIGH QUALITY_ZSL");
             camMode.eCamOperatingMode = OMX_TI_CaptureImageProfileZeroShutterLag;
-
-#ifdef CAMERAHAL_TUNA
-            if ( !mIternalRecordingHint ) {
-                zslHistoryLen.nHistoryLen = 5;
-            }
-#endif
-
         } else if( OMXCameraAdapter::VIDEO_MODE == mode ) {
             CAMHAL_LOGDA("Camera mode: VIDEO MODE");
             camMode.eCamOperatingMode = OMX_CaptureVideo;
@@ -704,6 +697,7 @@ status_t OMXCameraAdapter::setCaptureMode(OMXCameraAdapter::CaptureMode mode)
                 }
             }
 
+#ifndef CAMERAHAL_TUNA
         if((NO_ERROR == ret) && (OMXCameraAdapter::CP_CAM == mode)) {
             //Configure Single Preview Mode
             eError =  OMX_SetConfig(mCameraAdapterParameters.mHandleComp,
@@ -716,6 +710,7 @@ status_t OMXCameraAdapter::setCaptureMode(OMXCameraAdapter::CaptureMode mode)
                 CAMHAL_LOGDA("single preview mode configured successfully");
             }
         }
+#endif
 
 
         if( NO_ERROR == ret )
@@ -1211,7 +1206,7 @@ status_t OMXCameraAdapter::setVFramerate(OMX_U32 minFrameRate, OMX_U32 maxFrameR
 status_t OMXCameraAdapter::setMechanicalMisalignmentCorrection(const bool enable)
 {
     status_t ret = NO_ERROR;
-#ifndef MOTOROLA_CAMERA
+#if !defined(MOTOROLA_CAMERA) && !defined(CAMERAHAL_TUNA)
     OMX_ERRORTYPE eError = OMX_ErrorNone;
     OMX_TI_CONFIG_MM mm;
 
