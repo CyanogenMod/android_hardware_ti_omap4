@@ -298,7 +298,11 @@ OMX_ERRORTYPE OMX_ComponentInit(OMX_HANDLETYPE hComponent)
 #endif
 	char value[OMX_MAX_STRINGNAME_SIZE];
 	OMX_U32 mEnableVFR = 1; /* Flag used to enable/disable VFR for Encoder */
+#ifndef DOMX_TUNA
 	property_get("debug.vfr.enable", value, "1");
+#else
+	property_get("debug.vfr.enable", value, "0");
+#endif
 	mEnableVFR = atoi(value);
 
 	DOMX_ENTER("");
@@ -556,6 +560,11 @@ OMX_ERRORTYPE LOCAL_PROXY_H264E_SetParameter(OMX_IN OMX_HANDLETYPE hComponent,
 	if(nParamIndex == OMX_IndexParamPortDefinition)
 	{
 		pPortDef = (OMX_PARAM_PORTDEFINITIONTYPE *)pParamStruct;
+
+#ifdef DOMX_TUNA
+		// hack to fix video recording artifacts on tuna
+		pPortDef->format.video.nStride = LINUX_PAGE_SIZE;
+#endif
 
 		if(pPortDef->format.video.eColorFormat == OMX_TI_COLOR_FormatYUV420PackedSemiPlanar)
 		{
