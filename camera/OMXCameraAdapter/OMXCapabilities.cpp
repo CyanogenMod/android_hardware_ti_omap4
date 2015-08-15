@@ -2469,6 +2469,24 @@ status_t OMXCameraAdapter::getCaps(const int sensorId, CameraProperties::Propert
         CAMHAL_LOGDA("OMX capability query success");
     }
 
+#ifdef CAMERAHAL_PIRANHA
+    char variant[PROPERTY_VALUE_MAX];
+    if (property_get("ro.product.model", variant, NULL) &&
+        strstr(variant, "P31") != NULL) { // p31xx uses hwrotation
+        if (caps->tSenMounting.nSenId == SENSORID_S5K6A1GX03) { // back camera
+            caps->tSenMounting.nRotation = 270;
+        } else { // front camera
+            caps->tSenMounting.nRotation = 90;
+        }
+    }
+    // eliminate too big (unsupported) front camera preview sizes
+    if (caps->tSenMounting.nSenId == SENSORID_S5K6A1GX03) {
+        caps->tPreviewResRange.nWidthMax = 640;
+        caps->tPreviewResRange.nHeightMax = 480;
+        caps->nFocalLength = 130;
+    }
+#endif
+
 #ifdef CAMERAHAL_DEBUG
     _dumpOmxTiCap(sensorId, *caps);
 #endif
