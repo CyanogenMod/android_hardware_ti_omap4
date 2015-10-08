@@ -1576,7 +1576,7 @@ status_t CameraHal::allocVideoBufs(uint32_t width, uint32_t height, uint32_t buf
   }
 
   if ( NO_ERROR == ret ){
-    int32_t stride;
+    uint32_t stride;
     CameraBuffer *buffers = new CameraBuffer [bufferCount];
 
     memset (buffers, 0, sizeof(CameraBuffer) * bufferCount);
