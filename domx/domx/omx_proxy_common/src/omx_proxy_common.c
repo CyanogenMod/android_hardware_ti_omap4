@@ -64,6 +64,7 @@
 #include "OMX_TI_Common.h"
 #include "OMX_TI_Index.h"
 #include "OMX_TI_Core.h"
+#include "OMX_IndexExt.h"
 /*-------program files ----------------------------------------*/
 #include "omx_proxy_common.h"
 #include "omx_rpc.h"
@@ -1472,6 +1473,12 @@ OMX_ERRORTYPE __PROXY_GetParameter(OMX_IN OMX_HANDLETYPE hComponent,
 
 	switch(nParamIndex)
 	{
+#ifdef ANDROID_API_MM_OR_LATER
+		case OMX_IndexParamConsumerUsageBits:
+			eError = OMX_ErrorNotImplemented;
+			goto EXIT;
+#endif
+
 		case OMX_TI_IndexUseBufferDescriptor:
 			eRPCError = RPC_GetParameter(pCompPrv->hRemoteComp, nParamIndex, pParamStruct,
 				pLocBufNeedMap, &eCompReturn);
