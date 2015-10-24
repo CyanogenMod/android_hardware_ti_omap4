@@ -16,7 +16,6 @@
 # all OMAP4 devices.
 
 PRODUCT_PACKAGES += \
-    camera.omap5 \
-    hwcomposer.omap5
+    camera.$(TARGET_BOARD_PLATFORM)
 
 $(call inherit-product, hardware/ti/omap4/common.mk)

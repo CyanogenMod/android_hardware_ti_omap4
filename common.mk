@@ -18,6 +18,7 @@
 DEVICE_PACKAGE_OVERLAYS += hardware/ti/omap4/overlay
 
 PRODUCT_PACKAGES += \
+    hwcomposer.$(TARGET_BOARD_PLATFORM) \
     libdomx \
     libOMX_Core \
     libOMX.TI.DUCATI1.VIDEO.H264E \
