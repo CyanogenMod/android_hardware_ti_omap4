@@ -8,4 +8,6 @@ LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)
 LOCAL_MODULE := libcorkscrew
 LOCAL_MODULE_TAGS := optional
 
-include $(BUILD_SHARED_LIBRARY)
+ifeq ($(shell test $(PLATFORM_SDK_VERSION) -ge 20 || echo 1),)
+	include $(BUILD_SHARED_LIBRARY)
+endif
