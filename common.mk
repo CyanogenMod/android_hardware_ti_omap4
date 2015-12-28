@@ -15,8 +15,6 @@
 # This file lists the modules that are specific to OMAP4 but are used by
 # all OMAP4 devices.
 
-DEVICE_PACKAGE_OVERLAYS += hardware/ti/omap4/overlay
-
 PRODUCT_PACKAGES += \
     libdomx \
     libOMX_Core \
