@@ -97,6 +97,7 @@ MEMPLUGIN_BUFFER_ACCESSOR sDccBuffer;
 OMX_ERRORTYPE OMX_CameraVtcFreeMemory(OMX_IN OMX_HANDLETYPE hComponent)
 {
     OMX_ERRORTYPE eError = OMX_ErrorNone;
+#ifndef DOMX_TUNA
     PROXY_COMPONENT_PRIVATE *pCompPrv;
     OMX_PROXY_CAM_PRIVATE* pCamPrv;
     OMX_COMPONENTTYPE *hComp = (OMX_COMPONENTTYPE *) hComponent;
@@ -137,6 +138,7 @@ OMX_ERRORTYPE OMX_CameraVtcFreeMemory(OMX_IN OMX_HANDLETYPE hComponent)
 
 EXIT:
    DOMX_EXIT("eError: %d", eError);
+#endif
    return eError;
 }
 
@@ -152,6 +154,7 @@ EXIT:
 static OMX_ERRORTYPE _OMX_CameraVtcAllocateMemory(OMX_IN OMX_HANDLETYPE hComponent)
 {
     OMX_ERRORTYPE eError = OMX_ErrorNone, eCompReturn = OMX_ErrorNone;
+#ifndef DOMX_TUNA
     OMX_STATETYPE tState= OMX_StateInvalid;
     PROXY_COMPONENT_PRIVATE *pCompPrv;
     OMX_PROXY_CAM_PRIVATE* pCamPrv;
@@ -227,6 +230,7 @@ static OMX_ERRORTYPE _OMX_CameraVtcAllocateMemory(OMX_IN OMX_HANDLETYPE hCompone
 EXIT:
 
    DOMX_EXIT("eError: %d", eError);
+#endif
    return eError;
 }
 
