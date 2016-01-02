@@ -150,6 +150,7 @@ OMX_ERRORTYPE GLUE_CameraVtcAllocateMemory(OMX_IN OMX_HANDLETYPE hComponent, OMX
 {
 	OMX_U32 i;
 	OMX_ERRORTYPE eError = OMX_ErrorNone, eCompReturn = OMX_ErrorNone;
+#ifndef DOMX_TUNA
     PROXY_COMPONENT_PRIVATE *pCompPrv;
     OMX_PROXY_CAM_PRIVATE* pCamPrv;
     OMX_COMPONENTTYPE *hComp = (OMX_COMPONENTTYPE *) hComponent;
@@ -250,5 +251,6 @@ EXIT:
 	if (eError != OMX_ErrorNone) {
 		DOMX_ERROR("%s: Error  0x%x",__FUNCTION__, eError);
 	}
+#endif
     return eError;
 }
