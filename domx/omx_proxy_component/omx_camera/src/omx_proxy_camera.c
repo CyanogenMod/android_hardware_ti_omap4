@@ -97,6 +97,7 @@ MEMPLUGIN_BUFFER_ACCESSOR sDccBuffer;
 OMX_ERRORTYPE OMX_CameraVtcFreeMemory(OMX_IN OMX_HANDLETYPE hComponent)
 {
     OMX_ERRORTYPE eError = OMX_ErrorNone;
+#ifndef DOMX_TUNA
     PROXY_COMPONENT_PRIVATE *pCompPrv;
     OMX_PROXY_CAM_PRIVATE* pCamPrv;
     OMX_COMPONENTTYPE *hComp = (OMX_COMPONENTTYPE *) hComponent;
@@ -137,6 +138,7 @@ OMX_ERRORTYPE OMX_CameraVtcFreeMemory(OMX_IN OMX_HANDLETYPE hComponent)
 
 EXIT:
    DOMX_EXIT("eError: %d", eError);
+#endif
    return eError;
 }
 
@@ -152,6 +154,7 @@ EXIT:
 static OMX_ERRORTYPE _OMX_CameraVtcAllocateMemory(OMX_IN OMX_HANDLETYPE hComponent)
 {
     OMX_ERRORTYPE eError = OMX_ErrorNone, eCompReturn = OMX_ErrorNone;
+#ifndef DOMX_TUNA
     OMX_STATETYPE tState= OMX_StateInvalid;
     PROXY_COMPONENT_PRIVATE *pCompPrv;
     OMX_PROXY_CAM_PRIVATE* pCamPrv;
@@ -227,6 +230,7 @@ static OMX_ERRORTYPE _OMX_CameraVtcAllocateMemory(OMX_IN OMX_HANDLETYPE hCompone
 EXIT:
 
    DOMX_EXIT("eError: %d", eError);
+#endif
    return eError;
 }
 
@@ -354,12 +358,14 @@ static OMX_ERRORTYPE Camera_SendCommand(OMX_IN OMX_HANDLETYPE hComponent,
         }
     }
 
+#ifdef OMAP_ENHANCEMENT_VTC
     if ((eCmd == OMX_CommandStateSet) &&
 	(nParam == (OMX_STATETYPE) OMX_StateLoaded))
     {
         /* Clean up resources for Video VTC usecase. */
         OMX_CameraVtcFreeMemory(hComponent);
     }
+#endif
 
     eError =
 	PROXY_SendCommand(hComponent,eCmd,nParam,pCmdData);
@@ -395,8 +401,10 @@ static OMX_ERRORTYPE CameraGetConfig(OMX_IN OMX_HANDLETYPE
 	case OMX_TI_IndexConfigCamCapabilities:
 	case OMX_TI_IndexConfigExifTags:
 	case OMX_TI_IndexConfigAlgoAreas:
+#ifndef DOMX_TUNA
 	case OMX_TI_IndexConfigGammaTable:
         case OMX_TI_IndexConfigDynamicCameraDescriptor:
+#endif
 		pConfigSharedBuffer =
 			(OMX_TI_CONFIG_SHAREDBUFFER *) pComponentParameterStructure;
 
@@ -458,8 +466,10 @@ static OMX_ERRORTYPE CameraSetConfig(OMX_IN OMX_HANDLETYPE
 	case OMX_TI_IndexConfigCamCapabilities:
 	case OMX_TI_IndexConfigExifTags:
 	case OMX_TI_IndexConfigAlgoAreas:
+#ifndef DOMX_TUNA
 	case OMX_TI_IndexConfigGammaTable:
         case OMX_TI_IndexConfigDynamicCameraDescriptor:
+#endif
 		pConfigSharedBuffer =
 			(OMX_TI_CONFIG_SHAREDBUFFER *)
 			pComponentParameterStructure;
@@ -507,12 +517,14 @@ static OMX_ERRORTYPE CameraSetParam(OMX_IN OMX_HANDLETYPE
 
     switch (nParamIndex)
     {
+#ifndef DOMX_TUNA
 	case OMX_TI_IndexParamComponentBufferAllocation:
              eError = GLUE_CameraSetParam(hComponent,
                                           nParamIndex,
                                           pComponentParameterStructure);
 		goto EXIT;
 		break;
+#endif
 	default:
 		 break;
 	}
