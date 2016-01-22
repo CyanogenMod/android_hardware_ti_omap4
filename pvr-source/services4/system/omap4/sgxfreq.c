@@ -334,8 +334,16 @@ int sgxfreq_init(struct device *dev)
 	rcu_read_unlock();
 
 	mutex_init(&sfd.freq_mutex);
-	sfd.freq_limit = SYS_SGX_CLOCK_SPEED;
-	sgxfreq_set_freq_request(sfd.freq_list[sfd.freq_cnt - 1]);
+	if (cpu_is_omap446x()
+#ifdef cpu_is_omap447x
+	    || cpu_is_omap447x()
+#endif
+	    ) {
+		sfd.freq_limit = 384000000;
+	} else {
+		sfd.freq_limit = SYS_SGX_CLOCK_SPEED;
+	}
+	sgxfreq_set_freq_request(sfd.freq_limit);
 	sfd.sgx_data.clk_on = false;
 	sfd.sgx_data.active = false;
 
