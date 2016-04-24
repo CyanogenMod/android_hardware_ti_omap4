@@ -72,7 +72,7 @@
 
 #define RPC_MSGPIPE_SIZE (4)
 #define RPC_MSG_SIZE_FOR_PIPE (sizeof(OMX_PTR))
-#define MAX_ATTEMPTS 15
+#define MAX_ATTEMPTS 60
 
 #define RPC_getPacket(nPacketSize, pPacket) do { \
     pPacket = TIMM_OSAL_Malloc(nPacketSize, TIMM_OSAL_TRUE, 0, TIMMOSAL_MEM_SEGMENT_INT); \
@@ -124,16 +124,29 @@ RPC_OMX_ERRORTYPE RPC_InstanceInit(OMX_STRING cComponentName,
 	    "Malloc failed");
 	TIMM_OSAL_Memset(pRPCCtx, 0, sizeof(RPC_OMX_CONTEXT));
 
-	/*Assuming that open maintains an internal count for multi instance */
-	DOMX_DEBUG("Calling open on the device");
+	DOMX_DEBUG("Calling open and OMX_IOCCONNECT ioctl on the device");
 	while (1)
 	{
 		pRPCCtx->fd_omx = open("/dev/rpmsg-omx1", O_RDWR);
-		if(pRPCCtx->fd_omx >= 0 || errno != ENOENT || nAttempts == MAX_ATTEMPTS)
-			break;
-		DOMX_DEBUG("errno from open= %d, REATTEMPTING OPEN!!!!",errno);
+		if(pRPCCtx->fd_omx >= 0)
+		{
+			status = ioctl(pRPCCtx->fd_omx, OMX_IOCCONNECT, &sReq);
+			if (status >= 0)
+				break;
+			if (errno != ENXIO || nAttempts == MAX_ATTEMPTS)
+				break;
+			DOMX_DEBUG("errno from ioctl = %d, retrying...",errno);
+			close(pRPCCtx->fd_omx);
+		}
+		else
+		{
+			if ((errno != ENOENT && errno != ENXIO) || nAttempts == MAX_ATTEMPTS)
+				break;
+			DOMX_DEBUG("errno from open= %d, retrying...",errno);
+		}
+
 		nAttempts++;
-		usleep(1000000);
+		usleep(250000);
 	}
 	if(pRPCCtx->fd_omx < 0)
 	{
@@ -141,15 +154,15 @@ RPC_OMX_ERRORTYPE RPC_InstanceInit(OMX_STRING cComponentName,
 		eError = RPC_OMX_ErrorInsufficientResources;
 		goto EXIT;
 	}
-	DOMX_DEBUG("Open was successful, pRPCCtx->fd_omx = %d",
-	    pRPCCtx->fd_omx);
-//AD
-//      strncpy(sReq.name, cComponentName, OMX_MAX_STRINGNAME_SIZE);
-
-	DOMX_DEBUG("Calling ioctl");
-	status = ioctl(pRPCCtx->fd_omx, OMX_IOCCONNECT, &sReq);
-	RPC_assert(status >= 0, RPC_OMX_ErrorInsufficientResources,
-	    "Can't connect");
+	if(status < 0)
+	{
+		DOMX_ERROR("Can't ioctl device, errorno from ioctl = %d",errno);
+		eError = RPC_OMX_ErrorInsufficientResources;
+		close(pRPCCtx->fd_omx);
+		goto EXIT;
+	}
+	DOMX_DEBUG("Open and OMX_IOCCONNECT were successful, pRPCCtx->fd_omx = %d, ioctl status = %d",
+	    pRPCCtx->fd_omx, status);
 
 	for (i = 0; i < RPC_OMX_MAX_FUNCTION_LIST; i++)
 	{
