@@ -1123,7 +1123,7 @@ void AppCallbackNotifier::notifyFrame()
                                                       raw_picture,
                                                       exif_data, frame->mBuffer);
                     gEncoderQueue.add(frame->mBuffer->mapped, encoder);
-                    encoder->run();
+                    encoder->run("Encoder_libjpeg-AppCallbackNotifier");
                     encoder.clear();
                     if (params != NULL)
                       {

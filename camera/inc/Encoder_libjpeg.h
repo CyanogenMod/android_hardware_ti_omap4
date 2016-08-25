@@ -166,7 +166,7 @@ class Encoder_libjpeg : public android::Thread {
             if (mThumbnailInput) {
                 // start thread to encode thumbnail
                 mThumb = new Encoder_libjpeg(mThumbnailInput, NULL, NULL, mType, NULL, NULL, NULL, NULL);
-                mThumb->run();
+                mThumb->run("Encoder_libjpeg-Thumb");
             }
 
             // encode our main image
