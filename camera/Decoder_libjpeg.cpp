@@ -76,20 +76,10 @@ static void libjpeg_init_source(j_decompress_ptr cinfo) {
     libjpeg_source_mgr*  src = (libjpeg_source_mgr*)cinfo->src;
     src->next_input_byte = (const JOCTET*)src->mBufferPtr;
     src->bytes_in_buffer = 0;
-    src->current_offset = 0;
-}
-
-static boolean libjpeg_seek_input_data(j_decompress_ptr cinfo, long byte_offset) {
-    libjpeg_source_mgr* src = (libjpeg_source_mgr*)cinfo->src;
-    src->current_offset = byte_offset;
-    src->next_input_byte = (const JOCTET*)src->mBufferPtr + byte_offset;
-    src->bytes_in_buffer = 0;
-    return TRUE;
 }
 
 static boolean libjpeg_fill_input_buffer(j_decompress_ptr cinfo) {
     libjpeg_source_mgr* src = (libjpeg_source_mgr*)cinfo->src;
-    src->current_offset += src->mFilledLen;
     src->next_input_byte = src->mBufferPtr;
     src->bytes_in_buffer = src->mFilledLen;
     return TRUE;
@@ -121,7 +111,6 @@ libjpeg_source_mgr::libjpeg_source_mgr(unsigned char *buffer_ptr, int len) : mBu
     skip_input_data = libjpeg_skip_input_data;
     resync_to_restart = libjpeg_resync_to_restart;
     term_source = libjpeg_term_source;
-    seek_input_data = libjpeg_seek_input_data;
 }
 
 libjpeg_source_mgr::~libjpeg_source_mgr() {}
