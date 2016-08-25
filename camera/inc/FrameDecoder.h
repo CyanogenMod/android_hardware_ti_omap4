@@ -136,7 +136,7 @@ public:
         mInBuffers = inBuffers;
     }
 
-    virtual bool getPaddedDimensions(size_t &width, size_t &height) {
+    virtual bool getPaddedDimensions(__unused size_t &width, __unused size_t &height) {
         return false;
     }
 

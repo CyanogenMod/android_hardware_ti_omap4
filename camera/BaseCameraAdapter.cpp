@@ -402,7 +402,9 @@ void BaseCameraAdapter::returnFrame(CameraBuffer * frameBuf, CameraFrame::FrameT
 
 }
 
-status_t BaseCameraAdapter::sendCommand(CameraCommands operation, int value1, int value2, int value3, int value4) {
+status_t BaseCameraAdapter::sendCommand(CameraCommands operation, int value1, int value2,
+        __unused int value3, __unused int value4)
+{
     status_t ret = NO_ERROR;
     struct timeval *refTimestamp;
     BuffersDescriptor *desc = NULL;
@@ -1692,7 +1694,7 @@ status_t BaseCameraAdapter::stopImageCapture()
     return ret;
 }
 
-status_t BaseCameraAdapter::startBracketing(int range)
+status_t BaseCameraAdapter::startBracketing(__unused int range)
 {
     status_t ret = NO_ERROR;
 
@@ -1738,7 +1740,7 @@ status_t BaseCameraAdapter::cancelAutoFocus()
     return ret;
 }
 
-status_t BaseCameraAdapter::startSmoothZoom(int targetIdx)
+status_t BaseCameraAdapter::startSmoothZoom(__unused int targetIdx)
 {
     status_t ret = NO_ERROR;
 
@@ -1782,7 +1784,9 @@ status_t BaseCameraAdapter::stopPreview()
     return ret;
 }
 
-status_t BaseCameraAdapter::useBuffers(CameraMode mode, CameraBuffer* bufArr, int num, size_t length, unsigned int queueable)
+status_t BaseCameraAdapter::useBuffers(
+        __unused CameraMode mode, __unused CameraBuffer* bufArr,
+        __unused int num, __unused size_t length, __unused unsigned int queueable)
 {
     status_t ret = NO_ERROR;
 
@@ -1793,7 +1797,8 @@ status_t BaseCameraAdapter::useBuffers(CameraMode mode, CameraBuffer* bufArr, in
     return ret;
 }
 
-status_t BaseCameraAdapter::fillThisBuffer(CameraBuffer * frameBuf, CameraFrame::FrameType frameType)
+status_t BaseCameraAdapter::fillThisBuffer(
+        __unused CameraBuffer * frameBuf, __unused CameraFrame::FrameType frameType)
 {
     status_t ret = NO_ERROR;
 
@@ -1804,7 +1809,7 @@ status_t BaseCameraAdapter::fillThisBuffer(CameraBuffer * frameBuf, CameraFrame:
     return ret;
 }
 
-status_t BaseCameraAdapter::getFrameSize(size_t &width, size_t &height)
+status_t BaseCameraAdapter::getFrameSize(__unused size_t &width, __unused size_t &height)
 {
     status_t ret = NO_ERROR;
 
@@ -1815,7 +1820,7 @@ status_t BaseCameraAdapter::getFrameSize(size_t &width, size_t &height)
     return ret;
 }
 
-status_t BaseCameraAdapter::getFrameDataSize(size_t &dataFrameSize, size_t bufferCount)
+status_t BaseCameraAdapter::getFrameDataSize(__unused size_t &dataFrameSize, __unused size_t bufferCount)
 {
     status_t ret = NO_ERROR;
 
@@ -1826,7 +1831,7 @@ status_t BaseCameraAdapter::getFrameDataSize(size_t &dataFrameSize, size_t buffe
     return ret;
 }
 
-status_t BaseCameraAdapter::getPictureBufferSize(CameraFrame &frame, size_t bufferCount)
+status_t BaseCameraAdapter::getPictureBufferSize(__unused CameraFrame &frame, __unused size_t bufferCount)
 {
     status_t ret = NO_ERROR;
 
@@ -1876,7 +1881,10 @@ const char* BaseCameraAdapter::getLUTvalue_translateHAL(int Value, LUTtypeHAL LU
     return NULL;
 }
 
-status_t BaseCameraAdapter::setupTunnel(uint32_t SliceHeight, uint32_t EncoderHandle, uint32_t width, uint32_t height) {
+status_t BaseCameraAdapter::setupTunnel(
+    __unused uint32_t SliceHeight, __unused uint32_t EncoderHandle,
+    __unused uint32_t width, __unused uint32_t height)
+{
   status_t ret = NO_ERROR;
   LOG_FUNCTION_NAME;
   LOG_FUNCTION_NAME_EXIT;
@@ -2683,7 +2691,7 @@ status_t BaseCameraAdapter::getNextState(AdapterState &state)
     return ret;
 }
 
-void BaseCameraAdapter::onOrientationEvent(uint32_t orientation, uint32_t tilt)
+void BaseCameraAdapter::onOrientationEvent(__unused uint32_t orientation, __unused uint32_t tilt)
 {
     LOG_FUNCTION_NAME;
     LOG_FUNCTION_NAME_EXIT;

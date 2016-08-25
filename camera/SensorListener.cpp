@@ -37,7 +37,7 @@ static const int DEGREES_90_THRESH = 50;
 static const int DEGREES_180_THRESH = 170;
 static const int DEGREES_270_THRESH = 250;
 
-static int sensor_events_listener(int fd, int events, void* data)
+static int sensor_events_listener(__unused int fd, __unused int events, void* data)
 {
     SensorListener* listener = (SensorListener*) data;
     ssize_t num_sensors;

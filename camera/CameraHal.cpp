@@ -704,8 +704,8 @@ int CameraHal::setParameters(const android::CameraParameters& params)
             }
             mParameters.set(android::CameraParameters::KEY_PREVIEW_FPS_RANGE, valstr);
             CAMHAL_LOGDB("FPS Range = %s", valstr);
-            if ( curMaxFPS == (FRAME_RATE_HIGH_HD * CameraHal::VFR_SCALE) &&
-                 maxFPS < (FRAME_RATE_HIGH_HD * CameraHal::VFR_SCALE) ) {
+            if ( (unsigned int)curMaxFPS == (FRAME_RATE_HIGH_HD * CameraHal::VFR_SCALE) &&
+                 (unsigned int)maxFPS < (FRAME_RATE_HIGH_HD * CameraHal::VFR_SCALE) ) {
                 restartPreviewRequired = true;
             }
             frameRangeUpdated = true;
@@ -1523,7 +1523,7 @@ status_t CameraHal::freePreviewDataBufs()
     return ret;
 }
 
-status_t CameraHal::allocImageBufs(unsigned int width, unsigned int height, size_t size,
+status_t CameraHal::allocImageBufs(__unused unsigned int width, __unused unsigned int height, size_t size,
                                    const char* previewFormat, unsigned int bufferCount)
 {
     status_t ret = NO_ERROR;
@@ -3117,7 +3117,7 @@ void CameraHal::eventCallbackRelay(CameraHalEvent* event)
     LOG_FUNCTION_NAME_EXIT;
 }
 
-void CameraHal::eventCallback(CameraHalEvent* event)
+void CameraHal::eventCallback(__unused CameraHalEvent* event)
 {
     LOG_FUNCTION_NAME;
 
@@ -3274,7 +3274,7 @@ status_t CameraHal::takePicture(const char *params)
    @todo Define error codes if unable to switch to image capture
 
  */
-status_t CameraHal::__takePicture(const char *params, struct timeval *captureStart)
+status_t CameraHal::__takePicture(__unused const char *params, struct timeval *captureStart)
 {
     status_t ret = NO_ERROR;
     CameraFrame frame;
@@ -3877,7 +3877,7 @@ void CameraHal::putParameters(char *parms)
    @todo Define the error codes that this function can return
 
  */
-status_t CameraHal::sendCommand(int32_t cmd, int32_t arg1, int32_t arg2)
+status_t CameraHal::sendCommand(int32_t cmd, int32_t arg1, __unused int32_t arg2)
 {
     status_t ret = NO_ERROR;
 
@@ -4008,7 +4008,7 @@ void CameraHal::release()
    @todo  Error codes for dump fail
 
  */
-status_t  CameraHal::dump(int fd) const
+status_t  CameraHal::dump(__unused int fd) const
 {
     LOG_FUNCTION_NAME;
     ///Implement this method when the h/w dump function is supported on Ducati side

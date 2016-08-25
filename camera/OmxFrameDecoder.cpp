@@ -122,9 +122,9 @@ bool CallbackDispatcherThread::threadLoop() {
 }
 
 //Static
-OMX_ERRORTYPE OmxFrameDecoder::eventCallback(const OMX_HANDLETYPE component,
+OMX_ERRORTYPE OmxFrameDecoder::eventCallback(__unused const OMX_HANDLETYPE component,
         const OMX_PTR appData, const OMX_EVENTTYPE event, const OMX_U32 data1, const OMX_U32 data2,
-        const OMX_PTR pEventData) {
+        __unused const OMX_PTR pEventData) {
     OmxMessage msg;
     msg.type = OmxMessage::EVENT;
     msg.u.eventData.appData = appData;
@@ -136,7 +136,7 @@ OMX_ERRORTYPE OmxFrameDecoder::eventCallback(const OMX_HANDLETYPE component,
 }
 
 //Static
-OMX_ERRORTYPE OmxFrameDecoder::emptyBufferDoneCallback(OMX_HANDLETYPE hComponent,
+OMX_ERRORTYPE OmxFrameDecoder::emptyBufferDoneCallback(__unused OMX_HANDLETYPE hComponent,
         OMX_PTR appData, OMX_BUFFERHEADERTYPE* pBuffHead) {
     OmxMessage msg;
     msg.type = OmxMessage::EMPTY_BUFFER_DONE;
@@ -147,7 +147,7 @@ OMX_ERRORTYPE OmxFrameDecoder::emptyBufferDoneCallback(OMX_HANDLETYPE hComponent
 }
 
 //Static
-OMX_ERRORTYPE OmxFrameDecoder::fillBufferDoneCallback(OMX_HANDLETYPE hComponent,
+OMX_ERRORTYPE OmxFrameDecoder::fillBufferDoneCallback(__unused OMX_HANDLETYPE hComponent,
         OMX_PTR appData, OMX_BUFFERHEADERTYPE* pBuffHead) {
     OmxMessage msg;
     msg.type = OmxMessage::FILL_BUFFER_DONE;
@@ -196,7 +196,7 @@ OMX_ERRORTYPE OmxFrameDecoder::fillBufferDoneHandler(OMX_BUFFERHEADERTYPE* pBuff
 }
 
 OMX_ERRORTYPE OmxFrameDecoder::eventHandler(const OMX_EVENTTYPE event, const OMX_U32 data1, const OMX_U32 data2,
-            const OMX_PTR pEventData) {
+            __unused const OMX_PTR pEventData) {
 
     LOG_FUNCTION_NAME;
 
@@ -281,7 +281,7 @@ OMX_ERRORTYPE OmxFrameDecoder::eventHandler(const OMX_EVENTTYPE event, const OMX
     return ret;
     }
 
-void OmxFrameDecoder::doConfigure(const DecoderParameters& config) {
+void OmxFrameDecoder::doConfigure(__unused const DecoderParameters& config) {
     LOG_FUNCTION_NAME;
 
     LOG_FUNCTION_NAME_EXIT;
@@ -532,7 +532,7 @@ status_t OmxFrameDecoder::omxEmptyThisBuffer(android::sp<MediaBuffer>& inBuffer,
     def.nPortIndex = PortIndexInput;
     omxGetParameter(OMX_IndexParamPortDefinition, &def);
     CAMHAL_LOGD("Founded id for empty is %d ", inBuffer->bufferId);
-    if (inBuffer->filledLen > def.nBufferSize) {
+    if (inBuffer->filledLen > (int)def.nBufferSize) {
         CAMHAL_LOGE("Can't copy IN buffer due to it too small %d than needed %d", def.nBufferSize, inBuffer->filledLen);
         return UNKNOWN_ERROR;
     }
@@ -1032,7 +1032,7 @@ void OmxFrameDecoder::omxDumpPortSettings(OMX_PARAM_PORTDEFINITIONTYPE& def) {
     CAMHAL_LOGD("----------Port settings end--------------------");
 }
 
-void OmxFrameDecoder::omxDumpBufferHeader(OMX_BUFFERHEADERTYPE* bh) {
+void OmxFrameDecoder::omxDumpBufferHeader(__unused OMX_BUFFERHEADERTYPE* bh) {
     CAMHAL_LOGD("==============OMX_BUFFERHEADERTYPE start==============");
     CAMHAL_LOGD("nAllocLen=%d nFilledLen=%d nOffset=%d nFlags=0x%x", bh->nAllocLen, bh->nFilledLen, bh->nOffset, bh->nFlags);
     CAMHAL_LOGD("pBuffer=%p nOutputPortIndex=%d nInputPortIndex=%d nSize=0x%x", bh->pBuffer, bh->nOutputPortIndex, bh->nInputPortIndex, bh->nSize);

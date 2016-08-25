@@ -61,7 +61,7 @@ status_t MemoryManager::initialize() {
     return OK;
 }
 
-CameraBuffer* MemoryManager::allocateBufferList(int width, int height, const char* format, int &size, int numBufs)
+CameraBuffer* MemoryManager::allocateBufferList(__unused int width, __unused int height, const char* format, int &size, int numBufs)
 {
     LOG_FUNCTION_NAME;
 

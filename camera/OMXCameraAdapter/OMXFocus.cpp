@@ -36,7 +36,7 @@ namespace Camera {
 const nsecs_t OMXCameraAdapter::CANCEL_AF_TIMEOUT =  seconds_to_nanoseconds(1);
 
 status_t OMXCameraAdapter::setParametersFocus(const android::CameraParameters &params,
-                                              BaseCameraAdapter::AdapterState state)
+                                              __unused BaseCameraAdapter::AdapterState state)
 {
     status_t ret = NO_ERROR;
     const char *str = NULL;

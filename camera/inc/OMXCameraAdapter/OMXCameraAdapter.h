@@ -1070,13 +1070,13 @@ private:
     IPPMode mIPP;
 
     //jpeg Picture Quality
-    unsigned int mPictureQuality;
+    int mPictureQuality;
 
     //thumbnail resolution
-    unsigned int mThumbWidth, mThumbHeight;
+    int mThumbWidth, mThumbHeight;
 
     //thumbnail quality
-    unsigned int mThumbQuality;
+    int mThumbQuality;
 
     //variables holding the estimated framerate
     float mFPS, mLastFPS;
@@ -1092,7 +1092,8 @@ private:
 
     //current zoom
     android::Mutex mZoomLock;
-    unsigned int mCurrentZoomIdx, mTargetZoomIdx, mPreviousZoomIndx;
+    unsigned int mCurrentZoomIdx, mTargetZoomIdx;
+    int mPreviousZoomIndx;
     bool mZoomUpdating, mZoomUpdate;
     int mZoomInc;
     bool mReturnZoomStatus;

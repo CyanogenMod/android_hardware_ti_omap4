@@ -30,7 +30,7 @@ SwFrameDecoder::~SwFrameDecoder() {
 }
 
 
-void SwFrameDecoder::doConfigure(const DecoderParameters& params) {
+void SwFrameDecoder::doConfigure(__unused const DecoderParameters& params) {
     LOG_FUNCTION_NAME;
 
     mjpegWithHdrSize = (mParams.width * mParams.height / 2) +

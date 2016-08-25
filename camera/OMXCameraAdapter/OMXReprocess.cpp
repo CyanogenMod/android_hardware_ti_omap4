@@ -29,9 +29,9 @@
 namespace Ti {
 namespace Camera {
 
-status_t OMXCameraAdapter::setParametersReprocess(const android::CameraParameters &params,
+status_t OMXCameraAdapter::setParametersReprocess(__unused const android::CameraParameters &params,
                                                 CameraBuffer* buffers,
-                                                BaseCameraAdapter::AdapterState state)
+                                                __unused BaseCameraAdapter::AdapterState state)
 {
     status_t ret = NO_ERROR;
     int w, h, s;

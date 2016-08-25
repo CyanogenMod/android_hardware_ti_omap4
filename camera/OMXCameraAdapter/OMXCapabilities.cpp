@@ -1866,7 +1866,7 @@ status_t OMXCameraAdapter::insertGLBCESupported(CameraProperties::Properties* pa
     return ret;
 }
 
-status_t OMXCameraAdapter::insertDefaults(CameraProperties::Properties* params, OMX_TI_CAPTYPE &caps)
+status_t OMXCameraAdapter::insertDefaults(CameraProperties::Properties* params, __unused OMX_TI_CAPTYPE &caps)
 {
     status_t ret = NO_ERROR;
     char *pos, *str, *def;
@@ -2222,7 +2222,7 @@ bool OMXCameraAdapter::_checkOmxTiCap(const OMX_TI_CAPTYPE & caps)
 }
 
 
-bool OMXCameraAdapter::_dumpOmxTiCap(const int sensorId, const OMX_TI_CAPTYPE & caps)
+bool OMXCameraAdapter::_dumpOmxTiCap(__unused const int sensorId, const OMX_TI_CAPTYPE & caps)
 {
     if ( !_checkOmxTiCap(caps) )
     {
@@ -2421,7 +2421,7 @@ bool OMXCameraAdapter::_dumpOmxTiCap(const int sensorId, const OMX_TI_CAPTYPE & 
  * public exposed function declarations
  *****************************************/
 
-status_t OMXCameraAdapter::getCaps(const int sensorId, CameraProperties::Properties* params, OMX_HANDLETYPE handle)
+status_t OMXCameraAdapter::getCaps(__unused const int sensorId, CameraProperties::Properties* params, OMX_HANDLETYPE handle)
 {
     status_t ret = NO_ERROR;
     int caps_size = 0;

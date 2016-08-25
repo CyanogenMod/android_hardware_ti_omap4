@@ -643,7 +643,7 @@ public:
     //additional methods used for memory mapping
     virtual uint32_t * getOffsets() = 0;
     virtual int getFd() = 0;
-    virtual CameraBuffer * getBuffers(bool reset = false) { return NULL; }
+    virtual CameraBuffer * getBuffers(__unused bool reset = false) { return NULL; }
     virtual unsigned int getSize() {return 0; }
     virtual int getBufferCount() {return -1; }
 
@@ -1069,7 +1069,7 @@ public:
     virtual status_t minUndequeueableBuffers(int& unqueueable) = 0;
 
     // Given a vector of DisplayAdapters find the one corresponding to str
-    virtual bool match(const char * str) { return false; }
+    virtual bool match(__unused const char * str) { return false; }
 
 private:
 #ifdef OMAP_ENHANCEMENT_CPCAM

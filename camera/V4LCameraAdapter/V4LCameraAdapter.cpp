@@ -358,7 +358,7 @@ EXIT:
 }
 
 /*--------------------Camera Adapter Functions-----------------------------*/
-status_t V4LCameraAdapter::initialize(CameraProperties::Properties* caps)
+status_t V4LCameraAdapter::initialize(__unused CameraProperties::Properties* caps)
 {
     char value[PROPERTY_VALUE_MAX];
 
@@ -452,7 +452,7 @@ status_t V4LCameraAdapter::fillThisBuffer(CameraBuffer *frameBuf, CameraFrame::F
         return ret;
     }
     if (isNeedToUseDecoder()) {
-        for (int i = 0; i < mOutBuffers.size(); i++) {
+        for (int i = 0; i < (int)mOutBuffers.size(); i++) {
             android::sp<MediaBuffer>& outBuffer = mOutBuffers.editItemAt(i);
             CameraBuffer* buffer = static_cast<CameraBuffer*>(outBuffer->buffer);
             if (buffer == frameBuf) {
@@ -557,7 +557,7 @@ void V4LCameraAdapter::getParameters(android::CameraParameters& params)
 
 
 ///API to give the buffers to Adapter
-status_t V4LCameraAdapter::useBuffers(CameraMode mode, CameraBuffer *bufArr, int num, size_t length, unsigned int queueable)
+status_t V4LCameraAdapter::useBuffers(CameraMode mode, CameraBuffer *bufArr, int num, __unused size_t length, unsigned int queueable)
 {
     status_t ret = NO_ERROR;
 
@@ -1046,14 +1046,14 @@ status_t V4LCameraAdapter::getFrameSize(size_t &width, size_t &height)
     return ret;
 }
 
-status_t V4LCameraAdapter::getFrameDataSize(size_t &dataFrameSize, size_t bufferCount)
+status_t V4LCameraAdapter::getFrameDataSize(__unused size_t &dataFrameSize, __unused size_t bufferCount)
 {
     android::AutoMutex lock(mLock);
     // We don't support meta data, so simply return
     return NO_ERROR;
 }
 
-status_t V4LCameraAdapter::getPictureBufferSize(CameraFrame &frame, size_t bufferCount)
+status_t V4LCameraAdapter::getPictureBufferSize(CameraFrame &frame, __unused size_t bufferCount)
 {
     int width = 0;
     int height = 0;
@@ -1106,7 +1106,7 @@ status_t V4LCameraAdapter::recalculateFPS()
     return NO_ERROR;
 }
 
-void V4LCameraAdapter::onOrientationEvent(uint32_t orientation, uint32_t tilt)
+void V4LCameraAdapter::onOrientationEvent(__unused uint32_t orientation, __unused uint32_t tilt)
 {
     LOG_FUNCTION_NAME;
 
@@ -1161,7 +1161,7 @@ void V4LCameraAdapter::setupWorkingMode() {
     }
 }
 
-V4LCameraAdapter::V4LCameraAdapter(size_t sensor_index, CameraHal* hal)
+V4LCameraAdapter::V4LCameraAdapter(__unused size_t sensor_index, CameraHal* hal)
     :mPixelFormat(DEFAULT_PIXEL_FORMAT), mFrameRate(0), mCameraHal(hal),
      mSkipFramesCount(0)
 {

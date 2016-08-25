@@ -832,8 +832,8 @@ void AppCallbackNotifier::unlockBufferAndUpdatePtrs(CameraFrame* frame)
     buffer_handle_t *handle = reinterpret_cast<buffer_handle_t *>(frame->mBuffer->opaque);
     mapper.unlock(*handle);
     frame->mBuffer->mapped = NULL;
-    frame->mYuv[0] = NULL;
-    frame->mYuv[1] = NULL;
+    frame->mYuv[0] = 0;
+    frame->mYuv[1] = 0;
 }
 
 void AppCallbackNotifier::setExternalLocking(bool extBuffLocking)
@@ -884,8 +884,8 @@ void AppCallbackNotifier::copyAndSendPreviewFrame(CameraFrame* frame, int32_t ms
                     memset(dest->mapped, 0, (mPreviewMemory->size / MAX_BUFFERS));
                 }
             } else {
-              if ((NULL == frame->mYuv[0]) || (NULL == frame->mYuv[1])){
-                CAMHAL_LOGEA("Error! One of the YUV Pointer is NULL");
+              if ((0 == frame->mYuv[0]) || (0 == frame->mYuv[1])){
+                CAMHAL_LOGEA("Error! One of the YUV Pointer is zero");
                 goto exit;
               }
               else{
@@ -1195,24 +1195,24 @@ void AppCallbackNotifier::notifyFrame()
                                 if (mExternalLocking) {
                                     lockBufferAndUpdatePtrs(frame);
                                 }
-                                void *y_uv[2];
-                                mapper.lock((buffer_handle_t)vBuf, CAMHAL_GRALLOC_USAGE, bounds, y_uv);
+                                mmByte *y_uv[2];
+                                mapper.lock((buffer_handle_t)vBuf, CAMHAL_GRALLOC_USAGE, bounds, (void **)y_uv);
                                 y_uv[1] = y_uv[0] + mVideoHeight*4096;
 
-                                structConvImage input =  {frame->mWidth,
-                                                          frame->mHeight,
+                                structConvImage input =  {(int)frame->mWidth,
+                                                          (int)frame->mHeight,
                                                           4096,
                                                           IC_FORMAT_YCbCr420_lp,
                                                           (mmByte *)frame->mYuv[0],
                                                           (mmByte *)frame->mYuv[1],
-                                                          frame->mOffset};
+                                                          (int)frame->mOffset};
 
                                 structConvImage output = {mVideoWidth,
                                                           mVideoHeight,
                                                           4096,
                                                           IC_FORMAT_YCbCr420_lp,
-                                                          (mmByte *)y_uv[0],
-                                                          (mmByte *)y_uv[1],
+                                                          y_uv[0],
+                                                          y_uv[1],
                                                           0};
 
                                 VT_resizeFrame_Video_opt2_lp(&input, &output, NULL, 0);
@@ -1581,7 +1581,10 @@ void AppCallbackNotifier::setFrameProvider(FrameNotifier *frameNotifier)
     LOG_FUNCTION_NAME_EXIT;
 }
 
-status_t AppCallbackNotifier::startPreviewCallbacks(android::CameraParameters &params, CameraBuffer *buffers, uint32_t *offsets, int fd, size_t length, size_t count)
+status_t AppCallbackNotifier::startPreviewCallbacks(android::CameraParameters &params,
+    __unused CameraBuffer *buffers,
+    __unused uint32_t *offsets, __unused int fd,
+    __unused size_t length, __unused size_t count)
 {
     unsigned int *bufArr;
     int size = 0;
@@ -1748,7 +1751,9 @@ status_t AppCallbackNotifier::startRecording()
 }
 
 //Allocate metadata buffers for video recording
-status_t AppCallbackNotifier::initSharedVideoBuffers(CameraBuffer *buffers, uint32_t *offsets, int fd, size_t length, size_t count, CameraBuffer *vidBufs)
+status_t AppCallbackNotifier::initSharedVideoBuffers(CameraBuffer *buffers,
+    __unused uint32_t *offsets, __unused int fd,
+    __unused size_t length, size_t count, CameraBuffer *vidBufs)
 {
     status_t ret = NO_ERROR;
     LOG_FUNCTION_NAME;

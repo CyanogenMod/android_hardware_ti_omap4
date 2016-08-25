@@ -64,7 +64,7 @@ const CapPixelformat V4LCameraAdapter::mPixelformats [] = {
 
 /**** Utility functions to help translate V4L Caps to Parameter ****/
 
-status_t V4LCameraAdapter::insertDefaults(CameraProperties::Properties* params, V4L_TI_CAPTYPE &caps)
+status_t V4LCameraAdapter::insertDefaults(CameraProperties::Properties* params, __unused V4L_TI_CAPTYPE &caps)
 {
     status_t ret = NO_ERROR;
     LOG_FUNCTION_NAME;
@@ -253,7 +253,7 @@ status_t V4LCameraAdapter::sortAscend(V4L_TI_CAPTYPE &caps, uint16_t count) {
  * public exposed function declarations
  *****************************************/
 
-status_t V4LCameraAdapter::getCaps(const int sensorId, CameraProperties::Properties* params,
+status_t V4LCameraAdapter::getCaps(__unused const int sensorId, CameraProperties::Properties* params,
                                    V4L_HANDLETYPE handle) {
      status_t status = NO_ERROR;
      V4L_TI_CAPTYPE caps;

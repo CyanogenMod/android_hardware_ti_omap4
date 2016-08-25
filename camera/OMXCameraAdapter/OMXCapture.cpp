@@ -30,7 +30,7 @@ namespace Ti {
 namespace Camera {
 
 status_t OMXCameraAdapter::setParametersCapture(const android::CameraParameters &params,
-                                                BaseCameraAdapter::AdapterState state)
+                                                __unused BaseCameraAdapter::AdapterState state)
 {
     status_t ret = NO_ERROR;
     const char *str = NULL;
@@ -358,7 +358,7 @@ status_t OMXCameraAdapter::setParametersCapture(const android::CameraParameters 
     return ret;
 }
 
-status_t OMXCameraAdapter::getPictureBufferSize(CameraFrame &frame, size_t bufferCount)
+status_t OMXCameraAdapter::getPictureBufferSize(CameraFrame &frame, __unused size_t bufferCount)
 {
     status_t ret = NO_ERROR;
     OMXCameraPortParameters *imgCaptureData = NULL;
@@ -632,7 +632,7 @@ status_t OMXCameraAdapter::setVectorShot(int *evValues,
                                          size_t evCount,
                                          size_t frameCount,
                                          bool flush,
-                                         OMX_BRACKETMODETYPE bracketMode)
+                                         __unused OMX_BRACKETMODETYPE bracketMode)
 {
     status_t ret = NO_ERROR;
     OMX_ERRORTYPE eError = OMX_ErrorNone;
@@ -1466,7 +1466,7 @@ status_t OMXCameraAdapter::stopImageCapture()
 
     // Stop is always signalled externally in CPCAM mode
     // We need to make sure we really stop
-    if ((mCapMode == CP_CAM)) {
+    if (mCapMode == CP_CAM) {
         disableReprocess();
         disableImagePort();
         if ( NULL != mReleaseImageBuffersCallback ) {

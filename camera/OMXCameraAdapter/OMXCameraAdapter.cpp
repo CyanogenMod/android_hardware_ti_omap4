@@ -720,7 +720,7 @@ status_t OMXCameraAdapter::setParameters(const android::CameraParameters &params
     return ret;
 }
 
-void saveFile(unsigned char   *buff, int width, int height, int format) {
+void saveFile(unsigned char   *buff, int width, int height, __unused int format) {
     static int      counter = 1;
     int             fd = -1;
     char            fn[256];
@@ -1368,7 +1368,7 @@ status_t OMXCameraAdapter::flushBuffers(OMX_U32 nPort)
 }
 
 ///API to give the buffers to Adapter
-status_t OMXCameraAdapter::useBuffers(CameraMode mode, CameraBuffer * bufArr, int num, size_t length, unsigned int queueable)
+status_t OMXCameraAdapter::useBuffers(CameraMode mode, CameraBuffer * bufArr, int num, __unused size_t length, unsigned int queueable)
 {
     OMX_ERRORTYPE eError = OMX_ErrorNone;
     status_t ret = NO_ERROR;
@@ -3143,11 +3143,11 @@ OMX_ERRORTYPE OMXCameraAdapter::OMXCameraAdapterEventHandler(OMX_IN OMX_HANDLETY
     return eError;
 }
 
-OMX_ERRORTYPE OMXCameraAdapter::SignalEvent(OMX_IN OMX_HANDLETYPE hComponent,
+OMX_ERRORTYPE OMXCameraAdapter::SignalEvent(__unused OMX_IN OMX_HANDLETYPE hComponent,
                                           OMX_IN OMX_EVENTTYPE eEvent,
                                           OMX_IN OMX_U32 nData1,
                                           OMX_IN OMX_U32 nData2,
-                                          OMX_IN OMX_PTR pEventData)
+                                          __unused OMX_IN OMX_PTR pEventData)
 {
     android::AutoMutex lock(mEventLock);
     Utils::Message *msg;
@@ -3164,7 +3164,7 @@ OMX_ERRORTYPE OMXCameraAdapter::SignalEvent(OMX_IN OMX_HANDLETYPE hComponent,
             msg = mEventSignalQ.itemAt(i);
             if ( NULL != msg )
                 {
-                if( ( msg->command != 0 || msg->command == ( unsigned int ) ( eEvent ) )
+                if( ( msg->command != 0 || msg->command == eEvent )
                     && ( !msg->arg1 || ( OMX_U32 ) msg->arg1 == nData1 )
                     && ( !msg->arg2 || ( OMX_U32 ) msg->arg2 == nData2 )
                     && msg->arg3)
@@ -3204,11 +3204,11 @@ OMX_ERRORTYPE OMXCameraAdapter::SignalEvent(OMX_IN OMX_HANDLETYPE hComponent,
     return OMX_ErrorNone;
 }
 
-OMX_ERRORTYPE OMXCameraAdapter::RemoveEvent(OMX_IN OMX_HANDLETYPE hComponent,
+OMX_ERRORTYPE OMXCameraAdapter::RemoveEvent(__unused OMX_IN OMX_HANDLETYPE hComponent,
                                             OMX_IN OMX_EVENTTYPE eEvent,
                                             OMX_IN OMX_U32 nData1,
                                             OMX_IN OMX_U32 nData2,
-                                            OMX_IN OMX_PTR pEventData)
+                                            __unused OMX_IN OMX_PTR pEventData)
 {
   android::AutoMutex lock(mEventLock);
   Utils::Message *msg;
@@ -3223,7 +3223,7 @@ OMX_ERRORTYPE OMXCameraAdapter::RemoveEvent(OMX_IN OMX_HANDLETYPE hComponent,
           msg = mEventSignalQ.itemAt(i);
           if ( NULL != msg )
             {
-              if( ( msg->command != 0 || msg->command == ( unsigned int ) ( eEvent ) )
+              if( ( msg->command != 0 || msg->command == eEvent )
                   && ( !msg->arg1 || ( OMX_U32 ) msg->arg1 == nData1 )
                   && ( !msg->arg2 || ( OMX_U32 ) msg->arg2 == nData2 )
                   && msg->arg3)
@@ -3302,7 +3302,7 @@ OMX_ERRORTYPE OMXCameraAdapterEmptyBufferDone(OMX_IN OMX_HANDLETYPE hComponent,
 /*========================================================*/
 /* @ fn SampleTest_EmptyBufferDone :: Application callback*/
 /*========================================================*/
-OMX_ERRORTYPE OMXCameraAdapter::OMXCameraAdapterEmptyBufferDone(OMX_IN OMX_HANDLETYPE hComponent,
+OMX_ERRORTYPE OMXCameraAdapter::OMXCameraAdapterEmptyBufferDone(__unused OMX_IN OMX_HANDLETYPE hComponent,
                                    OMX_IN OMX_BUFFERHEADERTYPE* pBuffHeader)
 {
 
@@ -3426,7 +3426,7 @@ status_t OMXCameraAdapter::storeProfilingData(OMX_BUFFERHEADERTYPE* pBuffHeader)
 /*========================================================*/
 /* @ fn SampleTest_FillBufferDone ::  Application callback*/
 /*========================================================*/
-OMX_ERRORTYPE OMXCameraAdapter::OMXCameraAdapterFillBufferDone(OMX_IN OMX_HANDLETYPE hComponent,
+OMX_ERRORTYPE OMXCameraAdapter::OMXCameraAdapterFillBufferDone(__unused OMX_IN OMX_HANDLETYPE hComponent,
                                    OMX_IN OMX_BUFFERHEADERTYPE* pBuffHeader)
 {
 
@@ -3871,8 +3871,8 @@ status_t OMXCameraAdapter::sendCallBacks(CameraFrame frame, OMX_IN OMX_BUFFERHEA
   frame.mOffset = pBuffHeader->nOffset;
   frame.mWidth = port->mWidth;
   frame.mHeight = port->mHeight;
-  frame.mYuv[0] = NULL;
-  frame.mYuv[1] = NULL;
+  frame.mYuv[0] = 0;
+  frame.mYuv[1] = 0;
 
   if ( onlyOnce && mRecording )
     {
@@ -4084,7 +4084,7 @@ OMX_OTHER_EXTRADATATYPE *OMXCameraAdapter::getExtradata(const OMX_PTR ptrPrivate
                 OMX_U32 remainingSize = platformPrivate->nMetaDataSize;
                 OMX_OTHER_EXTRADATATYPE *extraData = (OMX_OTHER_EXTRADATATYPE *) platformPrivate->pMetaDataBuffer;
                 if ( NULL != extraData ) {
-                    while ( extraData->eType && extraData->nDataSize && extraData->data &&
+                    while ( extraData->eType && extraData->nDataSize && extraData->data[0] != 0 &&
                         (remainingSize >= extraData->nSize)) {
                         if ( type == extraData->eType ) {
                             return extraData;

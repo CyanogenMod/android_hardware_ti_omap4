@@ -106,7 +106,7 @@ static void libjpeg_skip_input_data(j_decompress_ptr cinfo, long num_bytes) {
     }
 }
 
-static boolean libjpeg_resync_to_restart(j_decompress_ptr cinfo, int desired) {
+static boolean libjpeg_resync_to_restart(j_decompress_ptr cinfo, __unused int desired) {
     libjpeg_source_mgr*  src = (libjpeg_source_mgr*)cinfo->src;
     src->next_input_byte = (const JOCTET*)src->mBufferPtr;
     src->bytes_in_buffer = 0;

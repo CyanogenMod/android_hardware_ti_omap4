@@ -492,7 +492,7 @@ void OMXCameraAdapter::updateGammaTable(const char* gamma)
 
 void OMXCameraAdapter::declareParameter3ABool(const android::CameraParameters &params, const char *key,
                                               OMX_BOOL &current_setting, E3ASettingsFlags pending,
-                                              const char *msg)
+                                              __unused const char *msg)
 {
     OMX_BOOL val = OMX_TRUE;
     const char *str = params.get(key);
@@ -1686,7 +1686,7 @@ status_t OMXCameraAdapter::set3ALock(OMX_BOOL toggleExp, OMX_BOOL toggleWb, OMX_
     return Utils::ErrorUtils::omxToAndroidError(eError);
 }
 
-status_t OMXCameraAdapter::setMeteringAreas(Gen3A_settings& Gen3A)
+status_t OMXCameraAdapter::setMeteringAreas(__unused Gen3A_settings& Gen3A)
 {
   status_t ret = NO_ERROR;
   OMX_ERRORTYPE eError = OMX_ErrorNone;
@@ -1883,7 +1883,7 @@ status_t OMXCameraAdapter::setAlgoGIC(Gen3A_settings& Gen3A)
     return setParameter3ABoolInvert((OMX_INDEXTYPE) OMX_TI_IndexConfigDisableGIC, Gen3A.AlgoGIC, "Green Inballance Correction");
 }
 
-status_t OMXCameraAdapter::setGammaTable(Gen3A_settings& Gen3A)
+status_t OMXCameraAdapter::setGammaTable(__unused Gen3A_settings& Gen3A)
 {
     status_t ret = NO_ERROR;
     OMX_ERRORTYPE eError = OMX_ErrorNone;

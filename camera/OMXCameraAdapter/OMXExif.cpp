@@ -29,7 +29,7 @@ namespace Ti {
 namespace Camera {
 
 status_t OMXCameraAdapter::setParametersEXIF(const android::CameraParameters &params,
-                                             BaseCameraAdapter::AdapterState state)
+                                             __unused BaseCameraAdapter::AdapterState state)
 {
     status_t ret = NO_ERROR;
     const char *valstr = NULL;
