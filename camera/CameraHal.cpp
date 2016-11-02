@@ -1569,6 +1569,8 @@ status_t CameraHal::allocVideoBufs(uint32_t width, uint32_t height, uint32_t buf
 {
   status_t ret = NO_ERROR;
   LOG_FUNCTION_NAME;
+  static volatile int32_t nextId = 0;
+  uint64_t mId;
 
   if( NULL != mVideoBuffers ){
     ret = freeVideoBufs(mVideoBuffers);
@@ -1589,7 +1591,9 @@ status_t CameraHal::allocVideoBufs(uint32_t width, uint32_t height, uint32_t buf
       for (unsigned int i = 0; i< bufferCount; i++){
         android::GraphicBufferAllocator &GrallocAlloc = android::GraphicBufferAllocator::get();
         buffer_handle_t handle;
-        ret = GrallocAlloc.alloc(width, height, HAL_PIXEL_FORMAT_NV12, CAMHAL_GRALLOC_USAGE, &handle, &stride);
+        mId = static_cast<uint64_t>(getpid()) << 32;
+        mId |= static_cast<uint32_t>(android_atomic_inc(&nextId));
+        ret = GrallocAlloc.allocate(width, height, HAL_PIXEL_FORMAT_NV12, CAMHAL_GRALLOC_USAGE, &handle, &stride, mId, "CameraHal");
         if (ret != NO_ERROR){
           CAMHAL_LOGEA("Couldn't allocate video buffers using Gralloc");
           ret = -NO_MEMORY;
