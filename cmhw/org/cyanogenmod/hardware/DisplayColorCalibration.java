@@ -38,9 +38,28 @@ package org.cyanogenmod.hardware;
 import org.cyanogenmod.internal.util.FileUtils;
 
 public class DisplayColorCalibration {
-    private static final String COLOR_FILE = "/sys/devices/platform/omapdss/manager0/cpr_coef";
-    private static final String COLOR_FILE_CTRL = "/sys/devices/platform/omapdss/manager0/cpr_enable";
+    private static final String MGR_PATH = getManagerPath();
+
+    private static final String COLOR_FILE = MGR_PATH + "cpr_coef";
+    private static final String COLOR_FILE_CTRL = MGR_PATH + "cpr_enable";
+
     private static int last_rgb[] = { 256, 256, 256 };
+
+    private static String getManagerPath() {
+        final String sysfs_root = "/sys/devices/platform/omapdss/";
+        final String disp_name = FileUtils.readOneLine(sysfs_root + "display0/name");
+
+        String mgr_path = "";
+
+        for (int mgr_idx = 0; mgr_idx < 3; mgr_idx++) {
+            mgr_path = sysfs_root + "manager" + mgr_idx + "/";
+            if (disp_name.equals(FileUtils.readOneLine(mgr_path + "display"))) {
+                break;
+            }
+        }
+
+        return mgr_path;
+    }
 
     public static boolean isSupported() {
         return true;
